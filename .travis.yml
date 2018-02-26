@@ -32,3 +32,6 @@ before_install:
 
 install:
     - build_index_wheel $PROJECT_SPEC
+
+script:
+    - install_run $PLAT
