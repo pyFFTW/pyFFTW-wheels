@@ -1,4 +1,5 @@
 function pre_build {
+    set -x
     # Any stuff that you need to do before you start building the wheels
     # Runs in the root directory of this repository.
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
