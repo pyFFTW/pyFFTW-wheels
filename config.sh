@@ -29,5 +29,5 @@ r = np.random.randn(32, 32, 32)
 # dimension of a 3D array).
 # see:  https://github.com/pyFFTW/pyFFTW/issues/40
 fftn(r, axes=(0, ))
-    EOF
+EOF
 }
