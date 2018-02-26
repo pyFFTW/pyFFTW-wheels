@@ -2,6 +2,10 @@ function pre_build {
     set -x
     # Any stuff that you need to do before you start building the wheels
     # Runs in the root directory of this repository.
+
+    # https://github.com/matthew-brett/multibuild/pull/146
+    yum install -y rsync
+
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
