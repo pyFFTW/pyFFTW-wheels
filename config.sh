@@ -1,6 +1,17 @@
 function pre_build {
     # Any stuff that you need to do before you start building the wheels
     # Runs in the root directory of this repository.
+    mkdir fftw
+    cd fftw/
+    curl -L "http://www.fftw.org/fftw-3.3.7.tar.gz" --output fftw-3.3.7.tar.gz
+    tar -xzf fftw-3.3.7.tar.gz
+    cd fftw-3.3.7
+    export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
+    export CONFIGURE="./configure --prefix=$PREFIX --with-pic --enable-shared --enable-threads --disable-fortran"
+    $CONFIGURE --enable-float --enable-sse --enable-sse2 --enable-avx
+    make -j 4
+    make install
+    # eval cd tests && make check-local && cd -
 }
 
 function run_tests {
