@@ -6,7 +6,8 @@ env:
         # pip dependencies to _test_ your project.  Include any dependencies
         # that you need, that are also specified in BUILD_DEPENDS, this will be
         # a separate install.
-        - TEST_DEPENDS="numpy scipy pytest"
+        - TEST_DEPENDS="numpy"
+        - PLAT=x86_64        
 
 language: python
 # The travis Python version is unrelated to the version we build and test
@@ -31,5 +32,3 @@ before_install:
 
 install:
     - build_index_wheel $PROJECT_SPEC
-
-
