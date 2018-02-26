@@ -4,7 +4,7 @@ function pre_build {
     # Runs in the root directory of this repository.
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
     build_simple fftw 3.3.7 \
-        http://www.fftw.org/fftw-3.3.7.tar.gz tar.gz \
+        http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
 
