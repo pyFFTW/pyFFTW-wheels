@@ -13,6 +13,7 @@ function pre_build {
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
 
+    # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
 
     # double
@@ -21,6 +22,7 @@ function pre_build {
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-sse2 --enable-avx
 
+    # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
 
     # long double (SSE2 and AVX not supported)
