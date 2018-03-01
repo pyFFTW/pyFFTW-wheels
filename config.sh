@@ -10,6 +10,7 @@ function pre_build {
 
     # TODO: make this a loop:
     # single
+    echo 'Building fftw: single'
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
@@ -20,6 +21,7 @@ function pre_build {
     rm fftw-stamp
 
     # double
+    echo 'Building fftw: double'
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
@@ -30,6 +32,7 @@ function pre_build {
     rm fftw-stamp
 
     # long double (SSE2 and AVX not supported)
+    echo 'Building fftw: long double'
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
