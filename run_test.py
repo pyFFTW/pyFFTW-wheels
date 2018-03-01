@@ -1,3 +1,4 @@
+# Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/run_test.py
 import numpy as np
 
 import pyfftw.builders
