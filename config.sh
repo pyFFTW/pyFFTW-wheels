@@ -17,10 +17,10 @@ function pre_build {
 
     # Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/build.sh
     # Should this be in env_vars.sh ?
-    export C_INCLUDE_PATH=$PREFIX/include  # required as fftw3.h installed here
+    export C_INCLUDE_PATH=$BUILD_PREFIX/include  # required as fftw3.h installed here
 
     # define STATIC_FFTW_DIR so the patched setup.py will statically link FFTW
-    export STATIC_FFTW_DIR=$PREFIX/lib
+    export STATIC_FFTW_DIR=$BUILD_PREFIX/lib
 }
 
 function run_tests {
