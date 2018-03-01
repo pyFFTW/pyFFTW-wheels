@@ -8,10 +8,25 @@ function pre_build {
 
     # Taken from: https://github.com/conda-forge/fftw-feedstock/blob/master/recipe/build.sh
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
+
+    # TODO: make this a loop:
+    # single
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
+
+    # double
+    build_simple fftw 3.3.7 \
+        http://www.fftw.org/ tar.gz \
+        --with-pic --enable-shared --enable-threads --disable-fortran \
+        --enable-sse2 --enable-avx
+
+    # long double (SSE2 and AVX not supported)
+    build_simple fftw 3.3.7 \
+        http://www.fftw.org/ tar.gz \
+        --with-pic --enable-shared --enable-threads --disable-fortran \
+        --enable-long-double
 
     # eval cd tests && make check-local && cd -
 
@@ -24,8 +39,8 @@ function pre_build {
 
     # TODO: These can be made into asserts per:
     # https://github.com/conda-forge/fftw-feedstock/blob/8eaa8a1c63e7fcb97c63c1ee8e33c62ef3afa9c7/recipe/meta.yaml#L29-L52
-    ls -l $C_INCLUDE_PATH
-    ls -l $STATIC_FFTW_DIR
+    ls -l $C_INCLUDE_PATH/fftw3*
+    ls -l $STATIC_FFTW_DIR/fftw3*
 
     if [[ `uname` == 'Linux' ]]; then
         # -Bsymbolic link flag to ensure MKL FFT routines don't shadow FFTW ones.
