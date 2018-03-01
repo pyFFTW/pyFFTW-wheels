@@ -1,7 +1,10 @@
 function pre_build {
+    echo "Starting pre-build"
+
     # Any stuff that you need to do before you start building the wheels
     # Runs in the root directory of this repository.
 
+    echo 'Building fftw'
     # Taken from: https://github.com/conda-forge/fftw-feedstock/blob/master/recipe/build.sh
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
 
@@ -56,5 +59,6 @@ function pre_build {
 }
 
 function run_tests {
+    echo "Starting tests..."
     python ../run_test.py
 }
