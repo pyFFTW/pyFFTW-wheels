@@ -1,5 +1,4 @@
 function pre_build {
-    set -x
     # Any stuff that you need to do before you start building the wheels
     # Runs in the root directory of this repository.
 
@@ -12,6 +11,7 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
+    # eval cd tests && make check-local && cd -
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
@@ -21,6 +21,7 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-sse2 --enable-avx
+    # eval cd tests && make check-local && cd -
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
@@ -30,7 +31,6 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-long-double
-
     # eval cd tests && make check-local && cd -
 
     # Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/build.sh
