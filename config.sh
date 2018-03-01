@@ -40,7 +40,7 @@ function pre_build {
     # TODO: These can be made into asserts per:
     # https://github.com/conda-forge/fftw-feedstock/blob/8eaa8a1c63e7fcb97c63c1ee8e33c62ef3afa9c7/recipe/meta.yaml#L29-L52
     ls -l $C_INCLUDE_PATH/fftw3*
-    ls -l $STATIC_FFTW_DIR/fftw3*
+    ls -l $STATIC_FFTW_DIR/libfftw3*
 
     if [[ `uname` == 'Linux' ]]; then
         # -Bsymbolic link flag to ensure MKL FFT routines don't shadow FFTW ones.
