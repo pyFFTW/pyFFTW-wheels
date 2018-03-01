@@ -16,11 +16,15 @@ function pre_build {
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
 
+    rm fftw-stamp
+
     # double
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-sse2 --enable-avx
+
+    rm fftw-stamp
 
     # long double (SSE2 and AVX not supported)
     build_simple fftw 3.3.7 \
