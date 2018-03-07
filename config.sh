@@ -43,7 +43,6 @@ function pre_build {
     # eval cd tests && make check-local && cd -
 
     # Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/build.sh
-    # Should this be in env_vars.sh ?
     export C_INCLUDE_PATH=$BUILD_PREFIX/include  # required as fftw3.h installed here
 
     # define STATIC_FFTW_DIR so the patched setup.py will statically link FFTW
@@ -57,7 +56,7 @@ function pre_build {
     # Clear CFLAGS from fftw build
     export CFLAGS=""
 
-    if [[ `uname` == 'Linux' ]]; then
+    if [ -z "$IS_OSX" ]; then
         # -Bsymbolic link flag to ensure MKL FFT routines don't shadow FFTW ones.
         # see:  https://github.com/pyFFTW/pyFFTW/issues/40
         export CFLAGS="$CFLAGS -Wl,-Bsymbolic"
