@@ -4,9 +4,6 @@ function pre_build {
     # Any stuff that you need to do before you start building the wheels
     # Runs in the root directory of this repository.
 
-    # https://github.com/matthew-brett/multibuild/pull/146
-    yum install -y rsync
-
     echo 'Building fftw'
     # Taken from: https://github.com/conda-forge/fftw-feedstock/blob/master/recipe/build.sh
     export CFLAGS="-O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
