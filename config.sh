@@ -1,5 +1,5 @@
 function pre_build {
-    set -eu
+    set -e
     echo "Starting pre-build"
 
     # Any stuff that you need to do before you start building the wheels
@@ -40,8 +40,6 @@ function pre_build {
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-long-double
     # eval cd tests && make check-local && cd -
-    
-    set +eu
 
     # Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/build.sh
     export C_INCLUDE_PATH=$BUILD_PREFIX/include  # required as fftw3.h installed here
