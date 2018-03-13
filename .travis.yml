@@ -28,6 +28,7 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.5
     - os: osx
+      osx_image: xcode6.4
       language: generic
       env:
         - MB_PYTHON_VERSION=2.7        
