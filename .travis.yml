@@ -37,3 +37,7 @@ install:
 
 script:
     - install_run $PLAT
+
+branches:
+  only:
+  - master
