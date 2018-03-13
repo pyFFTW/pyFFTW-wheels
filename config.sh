@@ -1,4 +1,5 @@
 function pre_build {
+    set -eu
     echo "Starting pre-build"
 
     # Any stuff that you need to do before you start building the wheels
@@ -16,7 +17,7 @@ function pre_build {
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
     echo 'Testing fftw: single'        
-    eval cd tests && make check-local && cd -
+    eval cd fftw-3.3.7/tests && make check-local && cd -
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
