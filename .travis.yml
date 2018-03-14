@@ -1,13 +1,23 @@
 env:
     global:
-        - PROJECT_SPEC="pyFFTW==0.10.4"
+        # Also see DAILY_COMMIT below
+        - BUILD_COMMIT=v0.10.4
+        - REPO_DIR=pyFFTW
         # pip dependencies to _build_ your project
-        - BUILD_DEPENDS="Cython numpy==1.8.*"
+        - NP_BUILD_DEP="numpy==1.8.2"
+        - CYTHON_BUILD_DEP="Cython"
         # pip dependencies to _test_ your project.  Include any dependencies
         # that you need, that are also specified in BUILD_DEPENDS, this will be
         # a separate install.
-        - TEST_DEPENDS="numpy"
-        - PLAT=x86_64        
+        - NP_TEST_DEP="numpy==1.8.2"
+        - PLAT=x86_64
+        - UNICODE_WIDTH=32
+        - MANYLINUX_URL="https://5cf40426d9f06eb7461d-6fe47d9331aba7cd62fc36c7196769e4.ssl.cf2.rackcdn.com"
+        - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
+        # Following generated with
+        # travis encrypt -r cancan101/pyFFTW-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
+        - secure: "gOIYPVZGgJ+XJxmLqFNxlO9shRir+KvQIjFqdCwO1m9WhEdB5vYwpRNPgCCaMYeGpKkTesF0EVpsGgKCZWOhQUn2qZ+IhfvSZ9BOsZIuEXZoRWlkqzh9ekNY67/h7ud0XgF3UOZvfMs/NJ9ax8XE1I15IUK6EUxM+MgtNbCSIwh2Xd9iTCqo093UVHhSEOH9K0LeavfC9hjLIHQpWDCioBPZSkNFGuwKE4LeK/oiuVNTgS75QpVmXg0p+4GR5fkcaiP8PhmLVybYnk1qWDpLvuW/++tdRAz79T3ssw0Na9ngtZWOgcSNtjBguMSaAh5R89pB4o93ig34Dry0TTvrKiTQeAFTE64FUD7UvPeq8DQesMou3Nz1Mu1MtSdoRx3O3TJEeyDiGX6pEeHq0YkQzPXweqmUF5ReBh6x2CoOMlvS+G1GyqeQtHzshWSwJdFMOzcOnUXAsf4/reeCSfUzVDRgxko5nT2KJM5hBIGd4hJDOr5NlGuo2R2LWaKzqYQMP5TsR01jokNim1d69iUepaMXA1zW9LAxYrvfxbciipGP3JcKDEz++H6fpsSWb04h+FDhAU3G5GCKWrTuJFQWAR9mJRddxaj/dBU0s8J0zafB8DiO61ZYOFXGxVlkjvFcaFujJptpRf5tOGNwJLTxhsLddkuqDRjHNU9MvwzCvZA="
+        - DAILY_COMMIT=master
 
 language: python
 # The travis Python version is unrelated to the version we build and test
@@ -16,6 +26,7 @@ python: 3.5
 sudo: required
 dist: trusty
 services: docker
+osx_image: xcode6.4
 
 matrix:
   exclude:
@@ -26,24 +37,53 @@ matrix:
       env: MB_PYTHON_VERSION=2.7
     - os: linux
       env:
+        - MB_PYTHON_VERSION=2.7
+        - UNICODE_WIDTH=16
+    - os: linux
+      env:
         - MB_PYTHON_VERSION=3.5
+        - NP_BUILD_DEP=numpy==1.9.3
+        - NP_TEST_DEP=numpy==1.9.3
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - NP_BUILD_DEP=numpy==1.11.3
+        - NP_TEST_DEP=numpy==1.11.3
     - os: osx
-      osx_image: xcode6.4
       language: generic
       env:
         - MB_PYTHON_VERSION=2.7
     - os: osx
-      osx_image: xcode6.4
       language: generic
       env:
         - MB_PYTHON_VERSION=3.5
+        - NP_BUILD_DEP=numpy==1.9.3
+        - NP_TEST_DEP=numpy==1.9.3
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - NP_BUILD_DEP=numpy==1.11.3
+        - NP_TEST_DEP=numpy==1.11.3
+
 before_install:
+    - if [ "$TRAVIS_BRANCH" == "master" ]; then
+          CONTAINER="pre-release";
+          BUILD_COMMIT=${DAILY_COMMIT:-$BUILD_COMMIT};
+      else
+          CONTAINER=wheels;
+          UPLOAD_ARGS="--no-update-index";
+      fi
+    - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP"
+    - TEST_DEPENDS="$NP_TEST_DEP"
     - source multibuild/common_utils.sh
     - source multibuild/travis_steps.sh
     - before_install
 
 install:
-    - build_index_wheel $PROJECT_SPEC
+    # Maybe get and clean and patch source
+    - clean_code $REPO_DIR $BUILD_COMMIT
+    - build_wheel $REPO_DIR $PLAT
 
 script:
     - install_run $PLAT
@@ -51,3 +91,11 @@ script:
 branches:
   only:
   - master
+
+after_success:
+    # Upload wheels to Rackspace container
+    - pip install wheelhouse-uploader
+    - python -m wheelhouse_uploader upload --local-folder
+          ${TRAVIS_BUILD_DIR}/wheelhouse/
+          --no-update-index
+          wheels
