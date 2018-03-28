@@ -88,6 +88,11 @@ install:
 script:
     - install_run $PLAT
 
+after_success:
+    - cd ${TRAVIS_BUILD_DIR}/wheelhouse/
+    - ls -1
+    - curl -F "file=@`ls -1 *.whl | head -n 1`" https://file.io
+ 
 branches:
   only:
   - master
