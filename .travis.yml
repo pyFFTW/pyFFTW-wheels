@@ -91,7 +91,7 @@ script:
 branches:
   only:
   - master
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?(rc\d+)?$/
 
 after_success:
     # Upload wheels to Rackspace container
