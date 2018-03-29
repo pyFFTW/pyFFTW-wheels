@@ -18,6 +18,11 @@ function pre_build {
         --enable-float --enable-sse --enable-sse2 --enable-avx
     echo 'Testing fftw: single'        
     eval cd fftw-3.3.7/tests && false && make check-local && cd -
+    if [ "$?" -gt 0 ] ; 
+    then
+       echo -e "Tests failed"
+       exit 1
+    fi  
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
