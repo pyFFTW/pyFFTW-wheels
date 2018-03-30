@@ -12,6 +12,7 @@ function pre_build {
     # TODO: make this a loop:
     # single
     echo 'Building fftw: single'
+    set -v
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
