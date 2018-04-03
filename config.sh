@@ -15,7 +15,13 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
-    # eval cd tests && make check-local && cd -
+    echo 'Testing fftw: single'
+    # eval cd tests && make check-local && cd -    
+    false
+    if [ "$?" -gt 0 ]; then
+      echo -e "Tests failed"
+      exit 1
+    fi
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
