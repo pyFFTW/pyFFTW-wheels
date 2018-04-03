@@ -58,7 +58,7 @@ Keeping the old build logs helps us keep track of previous problems and
 successful builds.
 
 Which pyFFTW commit does the repository build?
-====================================================
+===================================================
 
 The `pyFFTW-wheels` repository will build the commit specified in the
 ``BUILD_COMMIT`` at the top of the ``.travis.yml`` file.  This can be any
