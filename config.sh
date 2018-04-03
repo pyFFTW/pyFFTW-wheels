@@ -1,4 +1,5 @@
 function pre_build {
+    set -e
     echo "Starting pre-build"
 
     # Any stuff that you need to do before you start building the wheels
@@ -11,11 +12,18 @@ function pre_build {
     # TODO: make this a loop:
     # single
     echo 'Building fftw: single'
+    set -v
     build_simple fftw 3.3.7 \
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
-    # eval cd tests && make check-local && cd -
+    echo 'Testing fftw: single'        
+    eval cd fftw-3.3.7/tests && false && make check-local && cd -
+    if [ "$?" -gt 0 ] ; 
+    then
+       echo -e "Tests failed"
+       exit 1
+    fi  
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
@@ -26,7 +34,8 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-sse2 --enable-avx
-    # eval cd tests && make check-local && cd -
+    echo 'Testing fftw: double'        
+    eval cd fftw-3.3.7/tests && make check-local && cd -
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
@@ -37,7 +46,8 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-long-double
-    # eval cd tests && make check-local && cd -
+    echo 'Testing fftw: long double'        
+    eval cd fftw-3.3.7/tests && make check-local && cd -
 
     # Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/build.sh
     export C_INCLUDE_PATH=$BUILD_PREFIX/include  # required as fftw3.h installed here
