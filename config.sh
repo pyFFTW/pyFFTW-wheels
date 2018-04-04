@@ -18,7 +18,7 @@ function pre_build {
     echo 'Testing fftw: single'
     # eval cd tests && make check-local && cd -    
     # false ||
-    exit 1
+    return 1
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
