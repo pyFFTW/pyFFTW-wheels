@@ -17,8 +17,7 @@ function pre_build {
         --enable-float --enable-sse --enable-sse2 --enable-avx
     echo 'Testing fftw: single'
     set -e
-    # eval cd tests && make check-local && cd -    
-    false
+    eval cd tests && make check-local && false && cd -    
     set +e
 
     # Clear stamp file which prevents subsequent builds
