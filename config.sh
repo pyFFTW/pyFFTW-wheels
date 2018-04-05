@@ -16,9 +16,9 @@ function pre_build {
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
     echo 'Testing fftw: single'
-    set -e
+    set -ev
     cd tests && make check-local && false && cd -    
-    set +e
+    set +ev
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
