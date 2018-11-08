@@ -6,8 +6,10 @@ We automate wheel building using this custom github repository that builds on
 the travis-ci OSX machines and the travis-ci Linux machines.
 
 The travis-ci interface for the builds is
-https://travis-ci.org/cancan101/pyFFTW-wheels
+https://travis-ci.org/pyFFTW/pyFFTW-wheels
 
+Appveyor interface at
+https://ci.appveyor.com/project/pyFFTW/pyFFTW-wheels
 The driving github repository is
 https://github.com/cancan101/pyFFTW-wheels
 
@@ -39,8 +41,8 @@ containers we use to house the uploads.
 Triggering a build
 ==================
 
-You will likely want to edit the ``.travis.yml`` file to specify the
-``BUILD_COMMIT`` before triggering a build - see below.
+You will likely want to edit the ``.travis.yml`` and ``appveyor.yml`` files to
+specify the ``BUILD_COMMIT`` before triggering a build - see below.
 
 You will need write permission to the github repository to trigger new builds
 on the travis-ci interface.  Contact us on the mailing list if you need this.
@@ -61,8 +63,9 @@ Which pyFFTW commit does the repository build?
 ====================================================
 
 The `pyFFTW-wheels` repository will build the commit specified in the
-``BUILD_COMMIT`` at the top of the ``.travis.yml`` file.  This can be any
-naming of a commit, including branch name, tag name or commit hash.
+``BUILD_COMMIT`` at the top of the ``.travis.yml``  and ``appveyor.yml`` files.
+This can be any naming of a commit, including branch name, tag name or commit
+hash.
 
 Uploading the built wheels to pypi
 ==================================
@@ -79,14 +82,13 @@ and then upload them manually to PyPI, or by using twine_.  You can also use a
 script for doing this, housed at :
 https://github.com/MacPython/terryfy/blob/master/wheel-uploader
 
-For the ``wheel-uploader`` script, you'll need twine and `beautiful soup 4
-<bs4>`_.
+For the ``wheel-uploader`` script, you'll need twine and `Beautiful Soup 4`_.
 
 You will typically have a directory on your machine where you store wheels,
 called a `wheelhouse`.   The typical call for `wheel-uploader` would then
 be something like::
 
-    VERSION=0.10.4
+    VERSION=0.11.0
     CDN_URL=https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com
     wheel-uploader -u $CDN_URL -s -v -w ~/wheelhouse -t macosx pyFFTW $VERSION
     wheel-uploader -u $CDN_URL -s -v -w ~/wheelhouse -t manylinux1 pyFFTW $VERSION
@@ -101,7 +103,7 @@ where:
   ``~/wheelhouse``.
 
 ``pyFFTW`` is the root name of the wheel(s) to download / upload, and
-``0.10.4`` is the version to download / upload.
+``$VERSION`` is the version to download / upload.
 
 In order to use the Warehouse PyPI server, you will need something like this
 in your ``~/.pypirc`` file::
@@ -122,6 +124,6 @@ Of course, you will need permissions to upload to PyPI, for this to work.
 
 .. _manylinux1: https://www.python.org/dev/peps/pep-0513
 .. _twine: https://pypi.python.org/pypi/twine
-.. _bs4: https://pypi.python.org/pypi/beautifulsoup4
+.. _Beautiful Soup 4: https://pypi.python.org/pypi/beautifulsoup4
 .. _delocate: https://pypi.python.org/pypi/delocate
 .. _auditwheel: https://pypi.python.org/pypi/auditwheel
