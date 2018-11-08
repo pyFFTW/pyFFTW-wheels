@@ -59,21 +59,17 @@ matrix:
         - NP_BUILD_DEP=numpy==1.14.5
         - NP_TEST_DEP=numpy==1.14.5
     - os: osx
-      language: generic
       env:
         - MB_PYTHON_VERSION=2.7
     - os: osx
-      language: generic
       env:
         - MB_PYTHON_VERSION=3.5
     - os: osx
-      language: generic
       env:
         - MB_PYTHON_VERSION=3.6
         - NP_BUILD_DEP=numpy==1.11.3
         - NP_TEST_DEP=numpy==1.11.3
     - os: osx
-      langugage: objective-c
       env:
         - MB_PYTHON_VERSION=3.7
         - NP_BUILD_DEP=numpy==1.14.5
