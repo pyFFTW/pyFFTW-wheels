@@ -28,32 +28,20 @@ osx_image: xcode6.4
 matrix:
   include:
     - os: linux
-      language: python
-      # The travis Python version is unrelated to the version we build and test
-      # with.  This is set with the MB_PYTHON_VERSION variable.
-      python: 3.5
       env: MB_PYTHON_VERSION=2.7
     - os: linux
-      language: python
-      python: 3.5
       env:
         - MB_PYTHON_VERSION=2.7
         - UNICODE_WIDTH=16
     - os: linux
-      language: python
-      python: 3.5
       env:
         - MB_PYTHON_VERSION=3.5
     - os: linux
-      language: python
-      python: 3.5
       env:
         - MB_PYTHON_VERSION=3.6
         - NP_BUILD_DEP=numpy==1.11.3
         - NP_TEST_DEP=numpy==1.11.3
     - os: linux
-      language: python
-      python: 3.5
       env:
         - MB_PYTHON_VERSION=3.7
         - NP_BUILD_DEP=numpy==1.14.5
