@@ -6,10 +6,10 @@ We automate wheel building using this custom github repository that builds on
 the travis-ci OSX machines and the travis-ci Linux machines.
 
 The travis-ci interface for the builds is
-https://travis-ci.org/cancan101/pyFFTW-wheels
+https://travis-ci.org/pyFFTW/pyFFTW-wheels
 
 The driving github repository is
-https://github.com/cancan101/pyFFTW-wheels
+https://github.com/pyFFTW/pyFFTW-wheels
 
 How it works
 ============
@@ -68,7 +68,7 @@ Uploading the built wheels to pypi
 ==================================
 
 * release container visible at
-  https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com
+  http://8b8c47f30575e674b56d-47bd50c35cd79bd838daf386af554a83.r59.cf2.rackcdn.com/
 
 Be careful, this link points to a container on a distributed content delivery
 network.  It can take up to 15 minutes for the new wheel file to get updated
@@ -86,8 +86,8 @@ You will typically have a directory on your machine where you store wheels,
 called a `wheelhouse`.   The typical call for `wheel-uploader` would then
 be something like::
 
-    VERSION=0.10.4
-    CDN_URL=https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com
+    VERSION=0.11.0
+    CDN_URL=http://8b8c47f30575e674b56d-47bd50c35cd79bd838daf386af554a83.r59.cf2.rackcdn.com/
     wheel-uploader -u $CDN_URL -s -v -w ~/wheelhouse -t macosx pyFFTW $VERSION
     wheel-uploader -u $CDN_URL -s -v -w ~/wheelhouse -t manylinux1 pyFFTW $VERSION
 
@@ -101,7 +101,7 @@ where:
   ``~/wheelhouse``.
 
 ``pyFFTW`` is the root name of the wheel(s) to download / upload, and
-``0.10.4`` is the version to download / upload.
+``0.11.0`` is the version to download / upload.
 
 In order to use the Warehouse PyPI server, you will need something like this
 in your ``~/.pypirc`` file::
@@ -115,7 +115,7 @@ in your ``~/.pypirc`` file::
     password:your_password
 
 So, in this case, ``wheel-uploader`` will download all wheels starting with
-``pyFFTW-0.10.4-`` from the URL given by `$CDN_URL` to the local directory
+``pyFFTW-0.11.0-`` from the URL given by `$CDN_URL` to the local directory
 ``~/wheelhouse``, then upload them to PyPI.
 
 Of course, you will need permissions to upload to PyPI, for this to work.
