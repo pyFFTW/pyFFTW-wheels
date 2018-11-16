@@ -78,11 +78,10 @@ install:
   # Install the build dependencies of the project.
   - pip install %NP_TEST_DEP%
   - cd %REPO_DIR%
-  - pip install -r .\%REPO_DIR%\requirements.txt
+  - pip install -r requirements.txt
 
 build_script:
   # Build the wheel
-  - cd %REPO_DIR%
   - git fetch origin
   - git checkout %BUILD_COMMIT%
   - python setup.py bdist_wheel
