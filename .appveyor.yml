@@ -103,8 +103,7 @@ on_success:
   - pip install wheelhouse-uploader
   - python -m wheelhouse_uploader upload
     --local-folder=%REPO_DIR%\dist
-    %UPLOAD_ARGS%
-    wheels
+    --no-update-index wheels
 
 cache:
   # Avoid re-downloading large packages
