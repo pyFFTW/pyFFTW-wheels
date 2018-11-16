@@ -48,8 +48,6 @@ init:
       }
 
 install:
-  # Get and configure the FFTW libs
-  - "%CMD_IN_ENV% ./appveyor/setup_fftw_dlls.cmd"
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -70,6 +68,9 @@ install:
   - pip install wheel==0.26
   - dir %REPO_DIR%  # REPO_DIR should be empty prior to submodule update
   - git submodule update --init
+
+  # Get and configure the FFTW libs (must occur after the submodule update)
+  - "%CMD_IN_ENV% ./appveyor/setup_fftw_dlls.cmd"
 
   # - cd %REPO_DIR%
   # - git checkout %BUILD_COMMIT%
