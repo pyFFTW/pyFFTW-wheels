@@ -21,7 +21,7 @@ environment:
   matrix:
     - PYTHON: C:\Python27-x64
       PYTHON_ARCH: "64"  # define this to download 64-bit FFTW dlls
-      PYTHON_VERSION: "3.4"  # used by run_with_env.cmd
+      PYTHON_VERSION: "2.7"  # used by run_with_env.cmd
     - PYTHON: C:\Python35-x64
       PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.5"
