@@ -12,7 +12,8 @@ environment:
     secure: 9s0gdDGnNnTt7hvyNpn0/ZzOMGPdwPp2SewFTfGzYk7uI+rdAN9rFq2D1gAP4NQh
   NP_BUILD_DEP: "numpy==1.10.4"
   NP_TEST_DEP: "numpy==1.10.4"
-  # DAILY_COMMIT: master
+  # DAILY_COMMIT: master  # uncomment this to get a pre-release build from master
+
   # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
   # /E:ON and /V:ON options are not enabled in the batch script intepreter
   # See: http://stackoverflow.com/a/13751649/163740
@@ -87,7 +88,6 @@ build_script:
   - ECHO %CONTAINER%
   - git checkout %BUILD_COMMIT%
   - git status  # use to verify we are at the expected tag
-  - dir  # see if the FFTW libs are within the current directory
   # - set PYFFTW_LIB_DIR=C:\projects\pyfftw-wheels\%REPO_DIR%
   - python -c "from pkg_resources import get_build_platform; print(get_build_platform())"  # should be win-amd64
   # - python setup.py bdist_wheel
