@@ -12,7 +12,6 @@ environment:
     secure: 9s0gdDGnNnTt7hvyNpn0/ZzOMGPdwPp2SewFTfGzYk7uI+rdAN9rFq2D1gAP4NQh
   NP_BUILD_DEP: "numpy==1.10.4"
   NP_TEST_DEP: "numpy==1.10.4"
-  # DAILY_COMMIT: master  # uncomment this to get a pre-release build from master
 
   # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
   # /E:ON and /V:ON options are not enabled in the batch script intepreter
@@ -39,14 +38,6 @@ environment:
 
 init:
   - "ECHO \"%APPVEYOR_SCHEDULED_BUILD%\""
-  - ps: >-
-      if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
-        $env:CONTAINER = "pre-release"
-        if ($env:DAILY_COMMIT) { $env:BUILD_COMMIT = $env:DAILY_COMMIT }
-      } else {
-        $env:CONTAINER = "wheels"
-        $env:UPLOAD_ARGS = "--no-update-index"
-      }
 
 install:
 
@@ -85,7 +76,6 @@ build_script:
   # Build the wheel
   - git fetch origin
   - ECHO %BUILD_COMMIT%
-  - ECHO %CONTAINER%
   - git checkout %BUILD_COMMIT%
   - git status  # use to verify we are at the expected tag
   # - set PYFFTW_LIB_DIR=C:\projects\pyfftw-wheels\%REPO_DIR%
@@ -118,7 +108,7 @@ on_success:
   - python -m wheelhouse_uploader upload
     --local-folder=%REPO_DIR%\dist
     %UPLOAD_ARGS%
-    %CONTAINER%
+    wheels
 
 cache:
   # Avoid re-downloading large packages
