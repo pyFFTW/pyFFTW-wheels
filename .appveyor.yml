@@ -20,11 +20,19 @@ environment:
 
   matrix:
     - PYTHON: C:\Python27-x64
+      PYTHON_ARCH: "64"  # define this to download 64-bit FFTW dlls
+      PYTHON_VERSION: "3.4"  # used by run_with_env.cmd
     - PYTHON: C:\Python35-x64
+      PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.5"  # used by run_with_env.cmd
     - PYTHON: C:\Python36-x64
+      PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.6"  # used by run_with_env.cmd
       NP_BUILD_DEP: "numpy==1.12"
       NP_TEST_DEP: "numpy==1.12"
     - PYTHON: C:\Python37-x64
+      PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.7"  # used by run_with_env.cmd
       NP_BUILD_DEP: "numpy==1.14.5"
       NP_TEST_DEP: "numpy==1.14.5"
 
