@@ -55,6 +55,11 @@ install:
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+
+  # Check that we have the expected version and architecture for Python
+  - python --version
+  - python -c "import struct; print(struct.calcsize('P') * 8)"
+
   - python -m pip install -U pip
 
   # Fix MSVC builds for 64-bit Python. See:
@@ -63,14 +68,21 @@ install:
 
   # Pin wheel to 0.26 to avoid Windows ABI tag for built wheel
   - pip install wheel==0.26
+  - dir %REPO_DIR%  # REPO_DIR should be empty prior to submodule update
   - git submodule update --init
 
-  - cd %REPO_DIR%
-  - git checkout %BUILD_COMMIT%
+  # - cd %REPO_DIR%
+  # - git checkout %BUILD_COMMIT%
 
   # Install the build dependencies of the project.
   - pip install %NP_TEST_DEP%
   - pip install -r requirements.txt
+
+build_script:
+  # Build the wheel
+  - cd %REPO_DIR%
+  - git fetch origin
+  - git checkout %BUILD_COMMIT%
   - python setup.py bdist_wheel
   - ps: |
       # Upload artifact to Appveyor immediately after build
@@ -78,22 +90,16 @@ install:
           appveyor PushArtifact $_.FullName
           pip install $_.FullName
       }
-  - cd ..
-
-# Not a .NET project, we build pyFFTW in the install step instead
-build: false
 
 test_script:
   # Install the test / runtime dependencies
   - pip install %NP_TEST_DEP%
-  - pip install -r requirements.txt
   # Install the generated wheel package to test it
   - pip install --pre --no-index --find-links .\%REPO_DIR%\dist %PKG_NAME%
   # Check Python version just in case
   - python --version
   # Run unit tests with pytest
   - "python setup.py test"
-  - cd ..
 
 on_success:
   # Upload the generated wheel package to Rackspace
