@@ -2,7 +2,7 @@
 # Windows
 
 environment:
-  BUILD_COMMIT: v0.11.0
+  BUILD_COMMIT: v0.11.1
   REPO_DIR: pyFFTW
   PKG_NAME: pyFFTW
   WHEELHOUSE_UPLOADER_USERNAME: travis-worker
