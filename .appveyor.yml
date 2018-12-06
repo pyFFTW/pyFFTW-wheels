@@ -1,0 +1,115 @@
+# AppVeyor.com is a Continuous Integration service to build and run tests under
+# Windows
+
+environment:
+  BUILD_COMMIT: v0.11.1
+  REPO_DIR: pyFFTW
+  PKG_NAME: pyFFTW
+  WHEELHOUSE_UPLOADER_USERNAME: travis-worker
+  # https://www.appveyor.com/docs/build-configuration/#secure-variables
+  # Encrypted to matthew-brett account, for now.
+  WHEELHOUSE_UPLOADER_SECRET:
+    secure: 9s0gdDGnNnTt7hvyNpn0/ZzOMGPdwPp2SewFTfGzYk7uI+rdAN9rFq2D1gAP4NQh
+  NP_BUILD_DEP: "numpy==1.10.4"
+  NP_TEST_DEP: "numpy==1.10.4"
+
+  # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
+  # /E:ON and /V:ON options are not enabled in the batch script intepreter
+  # See: http://stackoverflow.com/a/13751649/163740
+  CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
+
+  matrix:
+    - PYTHON: C:\Python27-x64
+      PYTHON_ARCH: "64"  # define this to download 64-bit FFTW dlls
+      PYTHON_VERSION: "2.7"  # used by run_with_env.cmd
+    - PYTHON: C:\Python35-x64
+      PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.5"
+    - PYTHON: C:\Python36-x64
+      PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.6"
+      NP_BUILD_DEP: "numpy==1.12"
+      NP_TEST_DEP: "numpy==1.12"
+    - PYTHON: C:\Python37-x64
+      PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.7"
+      NP_BUILD_DEP: "numpy==1.14.5"
+      NP_TEST_DEP: "numpy==1.14.5"
+
+init:
+  - "ECHO \"%APPVEYOR_SCHEDULED_BUILD%\""
+
+install:
+
+  # Prepend newly installed Python to the PATH of this build (this cannot be
+  # done from inside the powershell script as it would require to restart
+  # the parent CMD process).
+  - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+
+  # Print the version and architecture for Python in the log
+  - python --version
+  - python -c "import struct; print(struct.calcsize('P') * 8)"
+
+  - python -m pip install -U pip
+
+  # Pin wheel to 0.26 to avoid Windows ABI tag for built wheel
+  - pip install wheel==0.26
+  - dir %REPO_DIR%  # REPO_DIR should be empty prior to submodule update
+  - git submodule update --init
+
+  - cd %REPO_DIR%
+  # Get and configure the FFTW libs (must occur after the submodule update)
+  - "%CMD_IN_ENV% ./appveyor/setup_fftw_dlls.cmd"
+
+  # Install the build dependencies of the project.
+  - pip install %NP_TEST_DEP%
+  - pip install -r requirements.txt
+
+build_script:
+  # Build the wheel
+  - git fetch origin
+  - ECHO %BUILD_COMMIT%
+  - git checkout %BUILD_COMMIT%
+  - git status  # use to verify we are at the expected tag
+  # - set PYFFTW_LIB_DIR=C:\projects\pyfftw-wheels\%REPO_DIR%
+
+  # print the build platform in the log (should be win-amd64)
+  - python -c "from pkg_resources import get_build_platform; print(get_build_platform())"
+
+  # - python setup.py bdist_wheel
+  - "%CMD_IN_ENV% python setup.py -v bdist_wheel"
+  - "%CMD_IN_ENV% python setup.py -v build_ext --inplace"
+  - ps: |
+      # Upload artifact to Appveyor immediately after build
+      ls dist -r | Foreach-Object {
+          appveyor PushArtifact $_.FullName
+          pip install $_.FullName
+      }
+
+  # TODO: may want to delete local FFTW dlls if we switch to testing from
+  #       wheels instead of an inplace build.
+  #- del libfftw*.dll
+
+test_script:
+  # Install the test / runtime dependencies
+  - pip install %NP_TEST_DEP%
+
+  # TODO: Install the generated wheel package to test it
+  #       For now we are testing with the --inplace build instead
+  # - pip install --pre --no-index --find-links .\dist %PKG_NAME%
+
+  # Run unit tests using the --inplace build
+  - python setup.py test
+
+on_success:
+  # Upload the generated wheel package to Rackspace
+  # On Windows, Apache Libcloud cannot find a standard CA cert bundle so we
+  # disable the ssl checks.
+  - pip install wheelhouse-uploader
+  - python -m wheelhouse_uploader upload
+    --local-folder=%REPO_DIR%\dist
+    --no-update-index wheels
+
+cache:
+  # Avoid re-downloading large packages
+  - '%APPDATA%\pip\Cache'
