@@ -1,6 +1,5 @@
 env:
     global:
-        # Also see DAILY_COMMIT below
         - BUILD_COMMIT=v0.11.1
         - REPO_DIR=pyFFTW
         # pip dependencies to _build_ your project
@@ -17,7 +16,6 @@ env:
         # Following generated with
         # travis encrypt -r cancan101/pyFFTW-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
         - secure: "gOIYPVZGgJ+XJxmLqFNxlO9shRir+KvQIjFqdCwO1m9WhEdB5vYwpRNPgCCaMYeGpKkTesF0EVpsGgKCZWOhQUn2qZ+IhfvSZ9BOsZIuEXZoRWlkqzh9ekNY67/h7ud0XgF3UOZvfMs/NJ9ax8XE1I15IUK6EUxM+MgtNbCSIwh2Xd9iTCqo093UVHhSEOH9K0LeavfC9hjLIHQpWDCioBPZSkNFGuwKE4LeK/oiuVNTgS75QpVmXg0p+4GR5fkcaiP8PhmLVybYnk1qWDpLvuW/++tdRAz79T3ssw0Na9ngtZWOgcSNtjBguMSaAh5R89pB4o93ig34Dry0TTvrKiTQeAFTE64FUD7UvPeq8DQesMou3Nz1Mu1MtSdoRx3O3TJEeyDiGX6pEeHq0YkQzPXweqmUF5ReBh6x2CoOMlvS+G1GyqeQtHzshWSwJdFMOzcOnUXAsf4/reeCSfUzVDRgxko5nT2KJM5hBIGd4hJDOr5NlGuo2R2LWaKzqYQMP5TsR01jokNim1d69iUepaMXA1zW9LAxYrvfxbciipGP3JcKDEz++H6fpsSWb04h+FDhAU3G5GCKWrTuJFQWAR9mJRddxaj/dBU0s8J0zafB8DiO61ZYOFXGxVlkjvFcaFujJptpRf5tOGNwJLTxhsLddkuqDRjHNU9MvwzCvZA="
-        - DAILY_COMMIT=master
 
 language: generic
 sudo: required
@@ -64,13 +62,6 @@ matrix:
         - NP_TEST_DEP=numpy==1.14.5
 
 before_install:
-    - if [ "$TRAVIS_BRANCH" == "master" ]; then
-          CONTAINER="pre-release";
-          BUILD_COMMIT=${DAILY_COMMIT:-$BUILD_COMMIT};
-      else
-          CONTAINER=wheels;
-          UPLOAD_ARGS="--no-update-index";
-      fi
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP"
     - TEST_DEPENDS="$NP_TEST_DEP"
     - source multibuild/common_utils.sh
@@ -95,5 +86,4 @@ after_success:
     - pip install wheelhouse-uploader
     - python -m wheelhouse_uploader upload --local-folder
           ${TRAVIS_BUILD_DIR}/wheelhouse/
-          $UPLOAD_ARGS
-          $CONTAINER
+          --no-update-index wheels
