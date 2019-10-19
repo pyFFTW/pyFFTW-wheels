@@ -26,12 +26,6 @@ osx_image: xcode10.1
 matrix:
   include:
     - os: linux
-      env: MB_PYTHON_VERSION=2.7
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - UNICODE_WIDTH=16
-    - os: linux
       env:
         - MB_PYTHON_VERSION=3.5
     - os: linux
@@ -49,10 +43,6 @@ matrix:
         - MB_PYTHON_VERSION=3.8
         - NP_BUILD_DEP=numpy==1.17.3
         - NP_TEST_DEP=numpy==1.17.3
-    - os: osx
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - MB_PYTHON_OSX_VER=10.9
     - os: osx
       env:
         - MB_PYTHON_VERSION=3.5
