@@ -11,7 +11,7 @@ https://travis-ci.org/pyFFTW/pyFFTW-wheels
 Appveyor interface at
 https://ci.appveyor.com/project/pyFFTW/pyFFTW-wheels
 The driving github repository is
-https://github.com/cancan101/pyFFTW-wheels
+https://github.com/pyFFTW/pyFFTW-wheels
 
 How it works
 ============
