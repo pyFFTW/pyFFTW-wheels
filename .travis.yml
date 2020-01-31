@@ -1,6 +1,6 @@
 env:
     global:
-        - BUILD_COMMIT=v0.11.1
+        - BUILD_COMMIT=v0.12.0
         - REPO_DIR=pyFFTW
         # pip dependencies to _build_ your project
         - NP_BUILD_DEP="numpy==1.13.3"
