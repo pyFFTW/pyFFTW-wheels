@@ -31,6 +31,10 @@ matrix:
       env:
         - MB_PYTHON_VERSION=2.7
         - UNICODE_WIDTH=16
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=2.7
 
 before_install:
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP"
