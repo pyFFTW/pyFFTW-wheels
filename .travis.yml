@@ -49,8 +49,7 @@ script:
 
 branches:
   only:
-  - master
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?(rc\d+)?$/
+  - py27_only
 
 after_success:
     # Upload wheels to Rackspace container
