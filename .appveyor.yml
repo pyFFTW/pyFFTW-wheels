@@ -2,7 +2,7 @@
 # Windows
 
 environment:
-  BUILD_COMMIT: v0.11.1
+  BUILD_COMMIT: v0.12.0
   REPO_DIR: pyFFTW
   PKG_NAME: pyFFTW
   WHEELHOUSE_UPLOADER_USERNAME: travis-worker
@@ -10,8 +10,8 @@ environment:
   # Encrypted to matthew-brett account, for now.
   WHEELHOUSE_UPLOADER_SECRET:
     secure: 9s0gdDGnNnTt7hvyNpn0/ZzOMGPdwPp2SewFTfGzYk7uI+rdAN9rFq2D1gAP4NQh
-  NP_BUILD_DEP: "numpy==1.10.4"
-  NP_TEST_DEP: "numpy==1.10.4"
+  NP_BUILD_DEP: "numpy==1.13.3"
+  NP_TEST_DEP: "numpy==1.13.3"
 
   # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
   # /E:ON and /V:ON options are not enabled in the batch script intepreter
@@ -19,27 +19,38 @@ environment:
   CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
 
   matrix:
-    - PYTHON: C:\Python27-x64
-      PYTHON_ARCH: "64"  # define this to download 64-bit FFTW dlls
-      PYTHON_VERSION: "2.7"  # used by run_with_env.cmd
-    - PYTHON: C:\Python35-x64
-      PYTHON_ARCH: "64"
+    - PYTHON: C:\Python35-x64  # define this to download 64-bit FFTW dlls
+      PYTHON_ARCH: "64"  # used by run_with_env.cmd
       PYTHON_VERSION: "3.5"
     - PYTHON: C:\Python36-x64
       PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.6"
-      NP_BUILD_DEP: "numpy==1.12"
-      NP_TEST_DEP: "numpy==1.12"
+      NP_BUILD_DEP: "numpy==1.13.3"
+      NP_TEST_DEP: "numpy==1.13.3"
     - PYTHON: C:\Python37-x64
       PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.7"
       NP_BUILD_DEP: "numpy==1.14.5"
       NP_TEST_DEP: "numpy==1.14.5"
+    - PYTHON: C:\Python38-x64
+      PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.8"
+      NP_BUILD_DEP: "numpy==1.17.3"
+      NP_TEST_DEP: "numpy==1.17.3"
 
 init:
   - "ECHO \"%APPVEYOR_SCHEDULED_BUILD%\""
 
 install:
+
+  - echo "Installed SDKs:"
+  - dir "C:/Program Files/Microsoft SDKs/Windows"
+
+  # Get needed submodules
+  - git submodule update --init
+
+  # Install new Python if necessary
+  - ps: .\multibuild\install_python.ps1
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -50,10 +61,9 @@ install:
   - python --version
   - python -c "import struct; print(struct.calcsize('P') * 8)"
 
-  - python -m pip install -U pip
+  # Upgrade to the latest pip, setuptools, and wheel
+  - python -m pip install -U pip setuptools wheel
 
-  # Pin wheel to 0.26 to avoid Windows ABI tag for built wheel
-  - pip install wheel==0.26
   - dir %REPO_DIR%  # REPO_DIR should be empty prior to submodule update
   - git submodule update --init
 
