@@ -15,7 +15,10 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-float --enable-sse --enable-sse2 --enable-avx
-    # eval cd tests && make check-local && cd -
+    echo 'Testing fftw: single'
+    set -ev
+    cd fftw-3.3.7/tests && make check-local && false && cd -    
+    set +ev
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
@@ -26,7 +29,9 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-sse2 --enable-avx
-    # eval cd tests && make check-local && cd -
+    set -ev
+    cd fftw-3.3.7/tests && make check-local && cd -    
+    set +ev
 
     # Clear stamp file which prevents subsequent builds
     rm fftw-stamp
@@ -37,7 +42,9 @@ function pre_build {
         http://www.fftw.org/ tar.gz \
         --with-pic --enable-shared --enable-threads --disable-fortran \
         --enable-long-double
-    # eval cd tests && make check-local && cd -
+    set -ev
+    cd fftw-3.3.7/tests && make check-local && cd -    
+    set +ev
 
     # Taken from: https://github.com/conda-forge/pyfftw-feedstock/blob/master/recipe/build.sh
     export C_INCLUDE_PATH=$BUILD_PREFIX/include  # required as fftw3.h installed here
